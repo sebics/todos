@@ -16,6 +16,8 @@ Start the ansible playbook:
 
     ansible-playbook playbookRunTodos.yml -i inventory.txt --ask-become-pass
 
+Password for the sudo is asked at command prompt.
+
 Link to the video of the application running on vimeo: https://vimeo.com/748314812
 
 _Pre-requisites_:
