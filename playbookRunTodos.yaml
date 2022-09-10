@@ -1,0 +1,73 @@
+--- 
+- 
+  name: update apt and install system packages
+  hosts: target4
+  become: yes
+  vars:
+    ubuntu_os_user: osboxes
+    node_app_location: /home/{{ ubuntu_os_user }}/application
+#    app_listening_port: 5000
+
+    MYSQL_ROOT_PASSWORD: secret
+    MYSQL_DATABASE: todos
+
+    MYSQL_HOST: localhost
+    MYSQL_USER: appTodos
+    MYSQL_PASSWORD: secret
+    MYSQL_DB: todos
+  tasks:
+    - name: install packages         
+      ansible.builtin.apt:
+        pkg:
+          - curl
+          - ufw
+          - nodejs
+          - npm
+          - mysql-client
+          - python3-mysqldb
+          - mysql-server
+        state: latest
+        update_cache: yes
+    - name: start MySQL
+      service: "name=mysql state=started enabled=yes"
+    - name: create the mysql database for the app
+      mysql_db: "db={{ MYSQL_DATABASE }} state=present"
+
+    - name: create a user for the todos app 
+      mysql_user:
+        name: "{{ MYSQL_USER }}"
+        host: localhost
+        password: "{{ MYSQL_PASSWORD }}"
+        priv: "{{ MYSQL_DATABASE }}.*:ALL"
+        state: present
+
+    - name: install forever to run the node.js app
+      npm: name=forever global=yes state=present
+    - name: ensure node.js app folder exists
+      file: "path={{ node_app_location }} state=directory"
+    - name: copy the app to server
+      copy: "src=app dest={{ node_app_location }}"
+    - name: configure the port where the application listens
+      replace:
+        path: "{{ node_app_location }}/app/src/index.js"
+        regexp: '3000'
+        replace: '"{{ app_listening_port }}"'
+    - name: install dependencies
+      npm: path={{ node_app_location }}/app
+#
+#    when MYSQL_DB is not set, the  application is running with sqllite file database
+#    - name: ensure 2 files are present
+#      file: "path=/etc/todos state=directory owner=osboxes group=osboxes mode=0700"
+
+    - name: check list of node.js apps running
+      command: forever list
+      register: forever_list
+      changed_when: false
+    - name: start node.js application
+      command: "/usr/local/bin/forever start {{ node_app_location }}/app/src/index.js"
+      when: "forever_list.stdout.find('src/index.js') == -1"
+      environment:
+        MYSQL_HOST: localhost
+        MYSQL_USER: appTodos
+        MYSQL_PASSWORD: secret
+        MYSQL_DB: todos
