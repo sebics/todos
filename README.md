@@ -22,5 +22,4 @@ _Pre-requisites_:
 
 Before running the ansible playbook few things: start the ubuntu image file, use ssh to connect one time from the Ansible controller to the Ubuntu workstation (user/pass osboxes/osboxes.org) to update the ssh .known_hosts with the target machine ssh key and avoid that ansible gets stopped. Also on the target machine modify hostname in /etc/hosts and /etc/hostnames to be target4.
 
-
-
+As the playbook takes around 30 minutes long on my machine to install the packages, some progress of installation can be checked on the target machine by tail -f /var/log/apt/term.log
