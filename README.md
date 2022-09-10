@@ -14,3 +14,4 @@ Start the ansible playbook:
 
     ansible-playbook playbookRunTodos.yml -i inventory.txt --ask-become-pass
 
+Link to the video of the application running on vimeo: https://vimeo.com/748314981
