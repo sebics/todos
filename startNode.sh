@@ -1,0 +1,5 @@
+export MYSQL_HOST=mysql_host_placeholder
+export MYSQL_USER=mysql_user_placeholder
+export MYSQL_PASSWORD=mysql_password_placeholder
+export MYSQL_DB=mysql_db_placeholder 
+/usr/local/bin/forever start app_path_placeholder
