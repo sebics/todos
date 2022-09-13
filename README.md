@@ -5,9 +5,7 @@ Clone this repository with:
     git clone https://github.com/sebics/todos.git
 
 
-Configure the VM target4 name and IP in the inventory.txt
-
-Choose a port for the application in the inventory.txt
+Configure the VM target4 name and IP in the inventory.txt Choose the listening port for the application in the inventory.txt
 
 Start the ansible playbook:
 
