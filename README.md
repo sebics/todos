@@ -15,8 +15,10 @@ Choose a port for the application in the inventory.txt
 Start the ansible playbook:
 
     ansible-playbook playbookRunTodos.yml -i inventory.txt --ask-become-pass
+    or
+    ansible-playbook playbook_create_app_user.yaml  -i inventory.txt --ask-become-pass 
 
-Password for the sudo is asked at command prompt.
+Password for the sudo on the target VM needs to be entered when requested at command prompt.
 
 Link to the video of the application running on vimeo: https://vimeo.com/748314812
 
